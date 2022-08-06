@@ -1,7 +1,7 @@
 .navbar {
     width: 100%;
     position: fixed;
-    color: black;
+    color: #353535;
     z-index: 999;
     font-size: 18px;
 
@@ -46,8 +46,9 @@
                 .options {
                     padding: 5px;
                     display: none;
-                    font-size: 14px;
+                    font-size: 15px;
                     position: absolute;
+                    width: 100px;
                     background-color: rgb(18, 18, 18);
                     color: white;
                     border-radius: 5px;
@@ -58,6 +59,7 @@
                     .options {
                         display: flex;
                         flex-direction: column;
+                        align-items: center;
                     }
                 }
             }
@@ -70,6 +72,19 @@
                 object-fit: cover;
                 cursor: pointer;
             }
+
+            .navBtn {
+                display: flex;
+                align-items: center;
+                margin-left: 15px;
+                padding: 5px 15px;
+                font-size: 16px;
+                cursor: pointer;
+                border: none;
+                color: #ffffff;
+                background-color: #295570;
+            }
+
         }
     }
 }
