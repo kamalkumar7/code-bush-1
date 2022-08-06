@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
+import { createError } from '../utils/error.js'
 import jwt from 'jsonwebtoken';
 
 export const register = async (req, res, next) => {
@@ -18,23 +19,29 @@ export const register = async (req, res, next) => {
         res.status(200).json("User has been created")
     }
     catch (err) {
-        console.log(err);
+        next(err)
     }
 }
 
 export const login = async () => {
-    const user = await User.findOne({ username: req.body.username });
-    if (!user) {
-        return res.status(500).json("User not found!!!");
+    try {
+        const user = await User.findOne({ username: req.body.username });
+        if (!user) {
+            return next(createError(404, "User not found!"));
+        }
+
+        const isPassword = await bcrypt.compare(req.body.password, user.password)
+
+        if (!isPassword) {
+            return next(createError(400, "Wrong Password or Username!"));
+        }
+
+        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT)
+
+        res.cookie("access_token", token, { httpOnly: true }).status(200).json(user);
+    }
+    catch (err) {
+        next(err);
     }
 
-    const isPassword = await bcrypt.compare(req.body.password, user.password)
-
-    if (!isPassword) {
-        return res.status(500).json("wrong Username or password!!!");
-    }
-
-    const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT)
-
-    res.cookie("access_token", token, { httpOnly: true }).status(200).json(user)
 }
