@@ -15,7 +15,6 @@ export const register = async (req, res, next) => {
         })
 
         const savedUser = await newUser.save();
-        console.log(savedUser)
         res.status(200).json("User has been created")
     }
     catch (err) {
@@ -23,7 +22,7 @@ export const register = async (req, res, next) => {
     }
 }
 
-export const login = async () => {
+export const login = async (req, res, next) => {
     try {
         const user = await User.findOne({ username: req.body.username });
         if (!user) {
@@ -38,7 +37,11 @@ export const login = async () => {
 
         const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT)
 
-        res.cookie("access_token", token, { httpOnly: true }).status(200).json(user);
+        const { password, ...others } = user._doc;
+        res.cookie("access_token", token, { httpOnly: true }).status(200).json({
+            details:
+                { ...others }, access_token: token
+        });
     }
     catch (err) {
         next(err);

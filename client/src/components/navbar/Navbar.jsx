@@ -1,24 +1,36 @@
 import './navbar.scss'
 import { Search, Notifications, ArrowDropDown } from '@mui/icons-material'
-import { useState } from 'react';
-import { Link } from "react-router-dom";
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../images/CodeBush.png";
+import { AuthContext } from '../../context/AuthContext';
 
 const Navbar = () => {
 
-    const user = false;
+    const { user } = useContext(AuthContext);
+    console.log(user)
+    const { dispatch } = useContext(AuthContext);
     const [isScrolled, setIsScrolled] = useState(false);
+    const navigate = useNavigate();
 
     window.onscroll = () => {
         setIsScrolled(window.pageYOffset === 0 ? false : true);
         return () => (window.onscroll = null);
     }
+
+    const handleLogout = () => {
+        dispatch({ type: "LOGOUT" });
+        navigate("/");
+    }
+
     return (
         <div className={isScrolled ? "navbar scrolled" : "navbar"}>
             <div className="container">
                 <div className="left">
                     <img src={Logo} alt="CodeBush" />
-                    <span>Home</span>
+                    <Link to={user ? "/" : "/login"} style={{ textDecoration: "inherit", color: "inherit" }} >
+                        <span>Home</span>
+                    </Link>
                     <span>ProblemSet</span>
                     <span>Streak</span>
                     <span>Calender</span>
@@ -26,18 +38,22 @@ const Navbar = () => {
                 </div>
                 {user ? (<div className="right">
                     <div className="profile">
-                        <span>hritik01478</span>
+                        <span>{user.username}</span>
                         <div className="options">
                             <span>Profile</span>
                             <span>Settings</span>
-                            <span>Log Out</span>
+                            <span onClick={handleLogout}>Log Out</span>
                         </div>
                     </div>
                     <img src="https://images.pexels.com/photos/6899260/pexels-photo-6899260.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" />
 
                 </div>) : (<div className="right">
-                    <button className='navBtn'>Login</button>
-                    <button className='navBtn'>Register</button>
+                    <Link to="/login">
+                        <button className='navBtn'>Login</button>
+                    </Link>
+                    <Link to="/register">
+                        <button className='navBtn'>Register</button>
+                    </Link>
                 </div>)}
             </div>
         </div >

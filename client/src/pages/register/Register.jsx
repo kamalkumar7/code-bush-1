@@ -1,16 +1,46 @@
-import Header from '../../components/header/Header'
-import Navbar from '../../components/navbar/Navbar'
+
 import './register.scss'
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from 'react';
-import Back from "../../images/Capture.jpeg";
 import CodeBush from "../../images/CodeBush.png"
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 
 
 const Register = () => {
 
     const [file, setFile] = useState("");
+    const [info, setInfo] = useState({});
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }))
+    }
+
+    const handleClick = async (e) => {
+        e.preventDefault();
+        try {
+            const data = new FormData();
+            data.append("file", file);
+            data.append("upload_preset", "upload");
+            const uploadRes = await axios.post(
+                "https://api.cloudinary.com/v1_1/hritik01478cloud/image/upload",
+                data
+            );
+
+            const { url } = uploadRes.data;
+            const newUser = {
+                ...info,
+                profilePic: url
+            }
+            await axios.post("/auth/register", newUser);
+            navigate("/login");
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
         <div className='register'>
@@ -21,7 +51,9 @@ const Register = () => {
                         src={CodeBush}
                         alt=""
                     />
-                    <button className="loginButton">Sign In</button>
+                    <Link to="/login">
+                        <button className="loginButton">Sign In</button>
+                    </Link>
                 </div>
             </div>
             <div className="container">
@@ -38,22 +70,22 @@ const Register = () => {
 
                             <div className="formInput">
                                 <label>Username</label>
-                                <input type="text" placeholder="hritik01478" />
+                                <input type="text" placeholder="hritik01478" id="username" onChange={(e) => handleChange(e)} />
                             </div>
                             <div className="formInput">
                                 <label>Email</label>
-                                <input type="text" placeholder="hritikkumar01478@gmail.com" />
+                                <input type="email" placeholder="hritikkumar01478@gmail.com" id="email" onChange={(e) => handleChange(e)} />
                             </div>
                             <div className="formInput">
                                 <label>Password</label>
-                                <input type="password" />
+                                <input type="password" id="password" onChange={(e) => handleChange(e)} />
                             </div>
                             <div className="formInput">
-                                <label>Username</label>
-                                <input type="text" placeholder="hritik01478" />
+                                <label>Phone No.</label>
+                                <input type="text" placeholder="+91 7564970051" onChange={(e) => handleChange(e)} />
                             </div>
 
-                            <button>SEND</button>
+                            <button onClick={handleClick}>SEND</button>
                         </form>
                     </div>
                 </div>
