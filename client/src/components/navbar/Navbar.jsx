@@ -34,7 +34,9 @@ const Navbar = () => {
                     <span>ProblemSet</span>
                     <span>Streak</span>
                     <span>Calender</span>
-                    <span>Typing</span>
+                    <Link to={user ? "/" : "typing"} style={{ textDecoration: "inherit", color: "inherit" }} >
+                        <span>Typing</span>
+                    </Link>
                 </div>
                 {user ? (<div className="right">
                     <div className="profile">
@@ -48,10 +50,10 @@ const Navbar = () => {
                     <img src="https://images.pexels.com/photos/6899260/pexels-photo-6899260.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" />
 
                 </div>) : (<div className="right">
-                    <Link to="/login">
+                    <Link to="/login" style={{ textDecoration: "inherit", color: "inherit" }}>
                         <button className='navBtn'>Login</button>
                     </Link>
-                    <Link to="/register">
+                    <Link to="/register" style={{ textDecoration: "inherit", color: "inherit" }}>
                         <button className='navBtn'>Register</button>
                     </Link>
                 </div>)}
