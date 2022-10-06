@@ -1,0 +1,48 @@
+@import "../../global.scss";
+
+.dateCell {
+  width: 100%;
+  background-color: transparent;
+  align-content: center;
+  align-items: center;
+  position: relative;
+  text-align: center;
+  // @media screen and (min-width: 200px) {
+  //     display: none;
+  // }
+  .dateHeader {
+    width: 100%;    
+    color: white;
+    border-radius: 6px;
+    align-items: center;
+    text-align: center;
+  }
+  .today {
+    width: 100%;
+    background-color: #0f73b6;
+    color: white;
+    text-align: center;
+    // border: 1px solid white;
+    // @media screen and (min-width: 200px) {
+    //   background-color: $palleteBlue;
+    // }
+  }
+  .list {
+    background-color: transparent;
+    color: white;
+    position: relative;
+    .contestsul {
+      width: 100%;      
+      list-style: none;
+      padding: 0;
+      position: relative;      
+      scrollbar-width: 0;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+}
+.lessOpacity {
+  opacity: 70%;
+}
